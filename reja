@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="uz">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Dars Reja — 23 Dars</title>
+  <style>
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      text-align: center;
+      padding: 20px;
+      background-color: #f8f9fa;
+    }
+
+    #sarlavha {
+      font-size: 36px;
+      color: #1a5276;
+      cursor: pointer;
+      text-decoration: underline;
+      margin: 30px 0;
+      transition: color 0.3s;
+    }
+
+    #sarlavha:hover {
+      color: #c0392b;
+    }
+
+    #jadval {
+      width: 95%;
+      max-width: 1000px;
+      margin: 0 auto;
+      border-collapse: collapse;
+      background-color: white;
+      box-shadow: 0 4px 12px rgba(0,0,0,0.1);
+      display: none;
+      font-size: 16px;
+    }
+
+    th, td {
+      border: 1px solid #bdc3c7;
+      padding: 12px 10px;
+      text-align: center;
+    }
+
+    th {
+      background-color: #2980b9;
+      color: white;
+      font-weight: bold;
+    }
+
+    tr:nth-child(even) {
+      background-color: #f2f6f9;
+    }
+
+    tr:hover {
+      background-color: #e8f4fc;
+    }
+
+    .video-btn {
+      background: none;
+      border: none;
+      color: #2980b9;
+      text-decoration: underline;
+      cursor: pointer;
+      font-weight: bold;
+      padding: 2px 5px;
+    }
+
+    .video-btn:hover {
+      color: #e74c3c;
+    }
+
+    .modal {
+      display: none;
+      position: fixed;
+      z-index: 1000;
+      left: 0;
+      top: 0;
+      width: 100%;
+      height: 100%;
+      background-color: rgba(0,0,0,0.8);
+      justify-content: center;
+      align-items: center;
+    }
+
+    .modal-content {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      max-width: 800px;
+      width: 90%;
+      max-height: 80vh;
+      overflow-y: auto;
+    }
+
+    .close {
+      color: #aaa;
+      float: right;
+      font-size: 28px;
+      font-weight: bold;
+      cursor: pointer;
+    }
+
+    .close:hover {
+      color: black;
+    }
+
+    .video-container {
+      position: relative;
+      padding-bottom: 56.25%;
+      height: 0;
+      overflow: hidden;
+    }
+
+    .video-container video {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+    }
+  </style>
+</head>
+<body>
+
+  <h1 id="sarlavha" onclick="jadvalniKorsat()">Dars reja</h1>
+
+  <table id="jadval">
+    <thead>
+      <tr>
+        <th>Dars raqami</th>
+        <th>Dars nomi</th>
+        <th>Kurs kunlari va vaqtlari</th>
+      </tr>
+    </thead>
+    <tbody id="darslar-tanasi"></tbody>
+  </table>
+
+  <!-- Modal video oynasi -->
+  <div id="videoModal" class="modal">
+    <div class="modal-content">
+      <span class="close" onclick="yopish()">&times;</span>
+      <div class="video-container">
+        <video id="darsVideo" controls>
+          <!-- SIZ TASHLAGAN VIDEO: video1.mp4 -->
+          <source src="video1.mp4" type="video/mp4">
+          <!-- Zaxira (agar video1.mp4 yo'q bo'lsa) -->
+          <source src="https://www.w3schools.com/html/mov_bbb.mp4" type="video/mp4">
+          Brauzeringiz video formatini qo'llab-quvvatlamaydi.
+        </video>
+      </div>
+      <p id="videoTitle" style="margin-top: 10px; font-weight: bold;"></p>
+    </div>
+  </div>
+
+  <script>
+    function jadvalniKorsat() {
+      const jadval = document.getElementById("jadval");
+      if (jadval.style.display === "none" || jadval.style.display === "") {
+        jadval.style.display = "table";
+        if (document.getElementById("darslar-tanasi").childElementCount === 0) {
+          darslarniYukla();
+        }
+      } else {
+        jadval.style.display = "none";
+      }
+    }
+
+    function darslarniYukla() {
+      const tanasi = document.getElementById("darslar-tanasi");
+      const darsNomi = [
+        "Kirish",
+        "Box bilan shkaf chizish",
+        "Bolalar kravati",
+        "Stol",
+        "Kompyuter stoli",
+        "Kravat oyog'lari",
+        "Bakal",
+        "Interyer 1 qism",
+        "Interyer 2 qism",
+        "Interyer 3 qism",
+        "Interyer 4 qism",
+        "Interyer 5 qism",
+        "Interyer 6 qism",
+        "Interyer 7 qism",
+        "Cosmos bilan ishlash",
+        "Modelkalar bilan ishlash",
+        "Imtihon",
+        "Qo'shimcha imtihon 1",
+        "Qo'shimcha Imtihon 2",
+        "Qo'shimcha Imtihon 3",
+        "Shaxmat doskasi",
+        "Wall light",
+        "PSP 2"
+      ];
+
+      const kunlar = ["Dushanba", "Chorshanba", "Juma"];
+      const vaqt = "15:00";
+
+      for (let i = 1; i <= darsNomi.length; i++) {
+        const tr = document.createElement("tr");
+        const kun = kunlar[(i - 1) % kunlar.length];
+        
+        const darsNomBtn = document.createElement("button");
+        darsNomBtn.className = "video-btn";
+        darsNomBtn.textContent = darsNomi[i - 1] || "Dars mavzusi";
+
+        if (i === 1) {
+          darsNomBtn.onclick = function() {
+            korsatVideo(i, darsNomi[i - 1]);
+          };
+        } else {
+          darsNomBtn.disabled = true;
+          darsNomBtn.style.opacity = "0.6";
+          darsNomBtn.title = "Hozircha faqat 1-dars mavjud";
+        }
+
+        tr.innerHTML = `<td>${i}</td><td></td><td>${kun}, ${vaqt}</td>`;
+        tr.cells[1].appendChild(darsNomBtn);
+        tanasi.appendChild(tr);
+      }
+    }
+
+    function korsatVideo(darsRaqami, darsNomi) {
+      const video = document.getElementById("darsVideo");
+      video.load();
+      document.getElementById("videoTitle").textContent = `Dars ${darsRaqami}: ${darsNomi}`;
+      document.getElementById("videoModal").style.display = "flex";
+    }
+
+    function yopish() {
+      document.getElementById("videoModal").style.display = "none";
+    }
+  </script>
+
+</body>
+</html>
